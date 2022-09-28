@@ -15,6 +15,11 @@ public class Ads : MonoBehaviour
         IronSource.Agent.init("16a036d7d", IronSourceAdUnits.REWARDED_VIDEO, IronSourceAdUnits.INTERSTITIAL, IronSourceAdUnits.OFFERWALL, IronSourceAdUnits.BANNER);
     }
 
+    void OnEnable()
+    {
+        IronSourceEvents.onInterstitialAdOpenedEvent += InterstitialAdOpenedEvent;
+    }
+
     void Start()
     {
         IsRewardReady();
@@ -29,9 +34,17 @@ public class Ads : MonoBehaviour
     {
         IsRewardReady();
         IsInterstitialReady();
+    }
 
-        IronSourceBannerSize.BANNER.SetAdaptive(true);
-        IronSource.Agent.displayBanner();
+    void OnDisable()
+    {
+        IronSourceEvents.onInterstitialAdClickedEvent -= InterstitialAdOpenedEvent;
+    }
+
+    //インターステーショナル広告をオープンにした際に行われる関数
+    void InterstitialAdOpenedEvent()
+    {
+        LoadInterstitial();
     }
 
     //インターステーショナル広告のロード
